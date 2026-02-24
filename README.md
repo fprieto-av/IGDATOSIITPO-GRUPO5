@@ -198,13 +198,39 @@ La aplicación se abre automáticamente en `http://localhost:3000`.
 
 ## Credenciales de Prueba
 
-| Rol | Email | Contraseña |
-|---|---|---|
-| Administrador | `admin@edugrade.com` | `123456` |
-| Estudiante (AR) | `fede@mail.com` | `123456` |
-| Estudiante (AR) | `ana@mail.com` | `123456` |
-| Estudiante (EEUU) | `john@mail.com` | `123456` |
-| Profesor | `jorge@mail.com` | `123456` |
+| Rol | Email | Contraseña | Descripción |
+|---|---|---|---|
+| Administrador | `admin@edugrade.com` | `123456` | Admin global |
+| Estudiante (AR) | `fede@mail.com` | `123456` | Federico Recursante — historial completo (BD reprobada 2 veces, Algo y Prog aprobadas) |
+| Estudiante (AR) | `ana@mail.com` | `123456` | Ana Aprevio — fue a previo en BD, SO activa |
+| Estudiante (AR) | `vale@mail.com` | `123456` | Valentina Fernández — **demo profesor/nota** (Prog y Algo aprobadas, Redes reprobada, BD activa 2026) |
+| Estudiante (EEUU) | `john@mail.com` | `123456` | John Exchange — aprobó en MIT y en UBA |
+| Profesor | `jorge@mail.com` | `123456` | Jorge Borges — dicta Bases de Datos I (UBA) |
+
+---
+
+## Escenario Demo: Profesor carga una nota → se refleja en el perfil del estudiante
+
+Este flujo demuestra la escritura dual MongoDB + Neo4j en tiempo real desde el dashboard docente.
+
+### Pasos
+
+1. **Iniciar sesión como profesor** con `jorge@mail.com` / `123456`
+2. En el **Panel Docente**, seleccionar la materia **Bases de Datos I (BD-AR)**
+3. Localizar a **Valentina Fernández** en la lista de alumnos — ya tiene el **1° Parcial: 5** cargado
+4. Ingresar un valor para **2° Parcial** y/o **Final** y hacer clic en 💾
+5. *(Opcional)* Hacer clic en **Cerrar Cursada** para mover la cursada a historial con estado APROBADO/REPROBADO
+6. Cerrar sesión e **iniciar sesión como estudiante** con `vale@mail.com` / `123456`
+7. En el **Dashboard** o en **Mi Perfil → Historial Académico**, verificar que las notas cargadas por el profesor ya aparecen
+
+### Perfil académico de Valentina (datos pre-cargados por el seed)
+
+| Materia | Año | Estado | Notas |
+|---|---|---|---|
+| Programación I | 2023 | APROBADO | P1: 8 · Final: 8 |
+| Algoritmos y Estructuras | 2024 | APROBADO | P1: 7 · Final: 7 |
+| Redes de Computadoras | 2025 | REPROBADO | P1: 3 · Final: 2 |
+| **Bases de Datos I** | **2026** | **CURSANDO** | **P1: 5** · (esperando nota del profesor) |
 
 ---
 

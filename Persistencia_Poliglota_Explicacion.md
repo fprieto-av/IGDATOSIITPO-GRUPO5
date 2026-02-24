@@ -115,14 +115,6 @@ La regla general es: **el motor que es fuente de verdad del dato decide si se bo
 
 ---
 
-## Resumen conceptual en una frase
-
-> En persistencia políglota, la consistencia no la garantiza ninguna base de datos sola: la garantiza la **capa de servicio de la aplicación**, que sabe qué escribir, en qué orden, en qué motor, y a quién creerle cuando hay conflicto.
-
-Las bases de datos son herramientas especializadas. El código que las orquesta es quien define el contrato de consistencia del sistema.
-
----
-
 ## Diagrama mental
 
 ```

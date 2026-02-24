@@ -376,7 +376,11 @@ def run_seed():
     est_klaus = post("estudiantes/", {"legajo": "L-700", "nombre": "Klaus",    "apellido": "Becker",     "email": "klaus@mail.com",  "pais": "DE", "password": "123456"})['id']
     put(f"estudiantes/{est_klaus}", {"institucion_id": inst_de})
 
-    print(f"   ✅ 10 estudiantes creados y vinculados.")
+    # Argentina (UBA) — estudiante demo para el escenario "profesor carga nota"
+    est_vale  = post("estudiantes/", {"legajo": "L-DM1", "nombre": "Valentina", "apellido": "Fernández",  "email": "vale@mail.com",   "pais": "AR", "password": "123456"})['id']
+    put(f"estudiantes/{est_vale}",  {"institucion_id": inst_ar})
+
+    print(f"   ✅ 11 estudiantes creados y vinculados.")
 
     # ══════════════════════════════════════════
     # 6. CURSADAS Y CALIFICACIONES
@@ -551,12 +555,45 @@ def run_seed():
     inscribir(est_klaus, mat_redes_de, "2026")
     registrar_nota(est_klaus, mat_redes_de, "PARCIAL_1", 1.7)
 
+    # ── Valentina (UBA): estudiante demo — historial cargado + BD activa para demo profesor ──
+    # Tiene materias aprobadas, una reprobada y una cursada activa en BD-AR 2026.
+    # Escenario demo: jorge@mail.com ingresa como profesor, ve a Bases de Datos I,
+    # y carga el 2° parcial y/o final de Valentina. Valentina luego inicia sesión
+    # como vale@mail.com y ve las notas actualizadas en su perfil.
+    print("   👉 Valentina: demo profesor-nota (Prog y Algo aprobadas; Redes reprobada; BD activa 2026)")
+    # Programación 2023 — aprobó
+    inscribir(est_vale, mat_prog_ar, "2023")
+    registrar_nota(est_vale, mat_prog_ar, "PARCIAL_1", 8)
+    registrar_nota(est_vale, mat_prog_ar, "FINAL",     8)
+    cerrar(est_vale, mat_prog_ar)                            # APROBADO
+    # Algoritmos 2024 — aprobó
+    inscribir(est_vale, mat_algo_ar, "2024")
+    registrar_nota(est_vale, mat_algo_ar, "PARCIAL_1", 7)
+    registrar_nota(est_vale, mat_algo_ar, "FINAL",     7)
+    cerrar(est_vale, mat_algo_ar)                            # APROBADO
+    # Redes 2025 — reprobó
+    inscribir(est_vale, mat_redes_ar, "2025")
+    registrar_nota(est_vale, mat_redes_ar, "PARCIAL_1", 3)
+    registrar_nota(est_vale, mat_redes_ar, "FINAL",     2)
+    cerrar(est_vale, mat_redes_ar)                           # REPROBADO (2 < 4)
+    # Bases de Datos I 2026 — CURSADA ACTIVA (solo parcial_1 cargado)
+    # Jorge (jorge@mail.com) puede agregar parcial_2 y/o final desde su dashboard
+    inscribir(est_vale, mat_bd_ar, "2026")
+    registrar_nota(est_vale, mat_bd_ar, "PARCIAL_1", 5)
+
     n_calificaciones = len(list(get_mongo().calificaciones.find()))
     print(f"\n✅ DATA SEED FINALIZADO EXITOSAMENTE.")
     print(f"   Instituciones : 4  |  Profesores : 7")
     print(f"   Materias       : 18 |  Carreras   : 4")
-    print(f"   Estudiantes    : 10 |  Reglas CV  : {len(reglas_conversion)}")
+    print(f"   Estudiantes    : 11 |  Reglas CV  : {len(reglas_conversion)}")
     print(f"   Calificaciones : {n_calificaciones} documentos en MongoDB")
+    print(f"\n🎓 ESCENARIO DEMO (cargar nota profesor → perfil estudiante):")
+    print(f"   1. Iniciar sesión como profesor: jorge@mail.com / 123456")
+    print(f"   2. Seleccionar materia: Bases de Datos I (BD-AR)")
+    print(f"   3. Buscar a Valentina Fernández (L-DM1) — tiene Parcial 1: 5")
+    print(f"   4. Cargar 2° Parcial y/o Final y guardar")
+    print(f"   5. Iniciar sesión como estudiante: vale@mail.com / 123456")
+    print(f"   6. Ver las notas actualizadas en el perfil")
 
 
 if __name__ == "__main__":
